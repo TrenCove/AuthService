@@ -1,19 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import sqlite3 from "sqlite3";
 import bodyParser from "body-parser";
-import crypto from "crypto";
-
-const db = new sqlite3.Database("./db/users.db", (error) => {
-  if (error) {
-    console.error(error.message);
-  }
-  console.log("Connected to the users database.");
-});
-
-interface LoginRequest {
-  username: string;
-  password: string;
-}
+import { LoginRequest } from "./types/interfaces";
+import { SignUpNewUser } from "./NewUser";
+import jwt from "jsonwebtoken";
+import { authenticateToken } from "./middleware/authenticateToken";
 
 const app: Express = express();
 app.use(bodyParser.json());
@@ -25,7 +15,7 @@ app.use(
 const port = 3000;
 
 app.get("/", (req: Request, res: Response) => {
-  db.all("SELECT * from users", [], (error, rows) => {
+  /*db.all("SELECT * from users", [], (error, rows) => {
     if (error) {
       console.log(error);
       throw error;
@@ -35,7 +25,11 @@ app.get("/", (req: Request, res: Response) => {
     });
     res.status(200).json(rows);
   });
-  //res.send("Auth Service Running");
+  res.send("Auth Service Running");*/
+});
+
+app.get("/testAuth", authenticateToken, (req: Request, res: Response) => {
+  res.send("Authenticated as " + req.user);
 });
 
 app.post("/login", (req: Request, res: Response) => {
@@ -44,25 +38,27 @@ app.post("/login", (req: Request, res: Response) => {
 
 app.post(
   "/signup",
-  (req: Request<unknown, unknown, LoginRequest, unknown>, res: Response) => {
-    console.log(req.body);
-    const username = req.body.username;
-    const password = req.body.password;
-    const hashedPassword = crypto
-      .createHmac("sha256", "memes")
-      .update(password)
-      .digest("hex");
-    db.run(
-      "INSERT INTO users (username,password,name,address) VALUES ($1,$2,$3,$4) RETURNING *",
-      [username, hashedPassword, "testname", "testaddress"],
-      (error) => {
-        if (error) {
-          console.log(error);
-          throw error;
-        }
-        res.status(200).json("Success");
+  async (
+    req: Request<unknown, unknown, LoginRequest, unknown>,
+    res: Response
+  ) => {
+    try {
+      const response = await SignUpNewUser(
+        req.body.username,
+        req.body.password,
+        req.body.name,
+        req.body.address
+      );
+      if (response == 200) {
+        //TODO: Might need to return more than just a username
+        const token = jwt.sign(req.body.username, "memes");
+        res.json(token);
+      } else {
+        res.sendStatus(400);
       }
-    );
+    } catch (error) {
+      res.sendStatus(400);
+    }
   }
 );
 
