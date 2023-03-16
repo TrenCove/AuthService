@@ -1,9 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
-import { LoginRequest } from "./types/interfaces";
+import { LoginRequest, SignUpRequest } from "./types/interfaces";
 import { SignUpNewUser } from "./NewUser";
 import jwt from "jsonwebtoken";
 import { authenticateToken } from "./middleware/authenticateToken";
+import { LoginUser } from "./Login";
 
 const app: Express = express();
 app.use(bodyParser.json());
@@ -32,14 +33,31 @@ app.get("/testAuth", authenticateToken, (req: Request, res: Response) => {
   res.send("Authenticated as " + req.user);
 });
 
-app.post("/login", (req: Request, res: Response) => {
-  //TODO
-});
+app.post(
+  "/login",
+  async (
+    req: Request<unknown, unknown, LoginRequest, unknown>,
+    res: Response
+  ) => {
+    try {
+      const response = await LoginUser(req.body.username, req.body.password);
+      if (response == 200) {
+        //TODO: Might need to return more than just a username
+        const token = jwt.sign(req.body.username, "memes");
+        res.json(token);
+      } else {
+        res.sendStatus(response);
+      }
+    } catch (error) {
+      res.sendStatus(400);
+    }
+  }
+);
 
 app.post(
   "/signup",
   async (
-    req: Request<unknown, unknown, LoginRequest, unknown>,
+    req: Request<unknown, unknown, SignUpRequest, unknown>,
     res: Response
   ) => {
     try {

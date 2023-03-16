@@ -1,4 +1,4 @@
-export interface LoginRequest {
+export interface SignUpRequest {
     username: string,
     password: string,
     name: Name,
@@ -16,4 +16,16 @@ export interface Address {
     city: string,
     postalCode: string,
     province: string
+}
+
+export interface UserDbRow {
+    username: string,
+    password: string,
+    name: Name,
+    address: Address
+}
+
+export interface LoginRequest {
+    username: string,
+    password: string
 }
