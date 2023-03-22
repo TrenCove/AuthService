@@ -3,31 +3,19 @@ import bodyParser from "body-parser";
 import { LoginRequest, SignUpRequest } from "./types/interfaces";
 import { SignUpNewUser } from "./NewUser";
 import jwt from "jsonwebtoken";
+import cors from "Cors";
 import { authenticateToken } from "./middleware/authenticateToken";
 import { LoginUser } from "./Login";
 
 const app: Express = express();
 app.use(bodyParser.json());
+app.use(cors());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
-const port = 3000;
-
-app.get("/", (req: Request, res: Response) => {
-  /*db.all("SELECT * from users", [], (error, rows) => {
-    if (error) {
-      console.log(error);
-      throw error;
-    }
-    rows.forEach((row) => {
-      console.log(row);
-    });
-    res.status(200).json(rows);
-  });
-  res.send("Auth Service Running");*/
-});
+const port = 3001;
 
 app.get("/testAuth", authenticateToken, (req: Request, res: Response) => {
   res.send("Authenticated as " + req.user);
