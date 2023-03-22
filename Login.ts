@@ -27,11 +27,11 @@ export async function LoginUser(
           console.log(error);
           return reject(400);
         }
-        if(row.password == hashedPassword){
+        if(row && row.password == hashedPassword){
             console.log("success");
             return resolve(200);
         }else{
-            console.log("Wrong password");
+            console.log("Error logging in");
             return resolve(401);
         }
       }

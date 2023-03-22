@@ -23,7 +23,7 @@ export async function SignUpNewUser(
   return new Promise((resolve, reject) => {
     db.run(
       "INSERT INTO users (username,password,name,address) VALUES ($1,$2,$3,$4)",
-      [username, hashedPassword, name, address],
+      [username, hashedPassword, JSON.stringify(name), JSON.stringify(address)],
       (error) => {
         if (error) {
           console.log(error);
