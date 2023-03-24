@@ -1,7 +1,7 @@
 import sqlite3 from "sqlite3";
 import { UserInfo } from "../types/interfaces";
 
-const db = new sqlite3.Database("./db/users.db", (error) => {
+const db = new sqlite3.Database("../db/users.db", (error) => {
   if (error) {
     console.error(error.message);
   }
@@ -14,7 +14,7 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
  * 
  * @param username - username of the user 
  * 
- * @returns a JSON which includes the name and the address of the user
+ * @returns a user object which includes the name and the address of the user
  */
 export async function GetUserInfo(username: string): Promise<UserInfo | undefined> {
     return new Promise((resolve, reject) => {

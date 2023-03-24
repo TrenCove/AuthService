@@ -2,7 +2,7 @@ import crypto from "crypto";
 import sqlite3 from "sqlite3";
 import { UserDbRow } from "../types/interfaces";
 
-const db = new sqlite3.Database("./db/users.db", (error) => {
+const db = new sqlite3.Database("../db/users.db", (error) => {
   if (error) {
     console.error(error.message);
   }
@@ -15,7 +15,7 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
  * @param username - username of the user
  * @param password - password of the user
  * 
- * @returns a status depending on if the user exists in the system or not
+ * @returns http status depending on if the user exists in the system or not 400
  */
 export async function LoginUser(
   username: string,

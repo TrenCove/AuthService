@@ -2,7 +2,7 @@ import crypto from "crypto";
 import sqlite3 from "sqlite3";
 import { Name, Address } from "../types/interfaces";
 
-const db = new sqlite3.Database("./db/users.db", (error) => {
+const db = new sqlite3.Database("../db/users.db", (error) => {
   if (error) {
     console.error(error.message);
   }
@@ -17,7 +17,7 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
  * @param name - the users name
  * @param address - an interface that contains multiple address information
  * 
- * @returns a success or fail code depending on if the sign up was successful
+ * @returns a http status code depending on if the sign up was successful
  */
 export async function SignUpNewUser(
   username: string,
