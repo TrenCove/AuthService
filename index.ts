@@ -1,11 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { LoginRequest, SignUpRequest } from "./types/interfaces";
-import { SignUpNewUser } from "./NewUser";
+import { SignUpNewUser } from "./functions/NewUser";
 import jwt from "jsonwebtoken";
 import cors from "Cors";
 import { authenticateToken } from "./middleware/authenticateToken";
-import { LoginUser } from "./Login";
+import { LoginUser } from "./functions/Login";
+import { GetUserInfo } from "./functions/GetUserInfo";
 
 const app: Express = express();
 app.use(bodyParser.json());
@@ -19,6 +20,12 @@ const port = 3001;
 
 app.get("/testAuth", authenticateToken, (req: Request, res: Response) => {
   res.send("Authenticated as " + req.user);
+});
+
+app.get("/getUserInfo", authenticateToken, async (req: Request, res: Response) => {
+  const user = req.user as string;
+  const userInfo = await GetUserInfo(user);
+  res.json(userInfo);
 });
 
 app.post(
