@@ -9,6 +9,14 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
   console.log("Connected to the users database.");
 });
 
+/**
+ * This allows an existing user to log into the system
+ * 
+ * @param username - username of the user
+ * @param password - password of the user
+ * 
+ * @returns a status depending on if the user exists in the system or not
+ */
 export async function LoginUser(
   username: string,
   password: string,

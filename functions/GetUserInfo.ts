@@ -9,6 +9,13 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
 });
 
 
+/**
+ * Gets the users information
+ * 
+ * @param username - username of the user 
+ * 
+ * @returns a JSON which includes the name and the address of the user
+ */
 export async function GetUserInfo(username: string): Promise<UserInfo | undefined> {
     return new Promise((resolve, reject) => {
       db.get(
