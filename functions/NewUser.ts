@@ -9,6 +9,16 @@ const db = new sqlite3.Database("./db/users.db", (error) => {
   console.log("Connected to the users database.");
 });
 
+/**
+ * This allows new users to sign up the the system, they are stored in the users database
+ * 
+ * @param username - the users username
+ * @param password - the users password
+ * @param name - the users name
+ * @param address - an interface that contains multiple address information
+ * 
+ * @returns a success or fail code depending on if the sign up was successful
+ */
 export async function SignUpNewUser(
   username: string,
   password: string,
