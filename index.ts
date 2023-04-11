@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { LoginRequest, SignUpRequest } from "./types/interfaces";
 import { SignUpNewUser } from "./functions/NewUser";
 import jwt from "jsonwebtoken";
-import cors from "Cors";
+import cors from "cors";
 import { authenticateToken } from "./middleware/authenticateToken";
 import { LoginUser } from "./functions/Login";
 import { GetUserInfo } from "./functions/GetUserInfo";
